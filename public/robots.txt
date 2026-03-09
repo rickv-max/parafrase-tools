@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://parafrase-tools.vercel.app/sitemap.xml
