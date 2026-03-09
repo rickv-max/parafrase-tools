@@ -1,5 +1,5 @@
 export const paraphraseText = async (text, mode = "standard") => {
-  const res = await fetch("http://localhost:3001/api/paraphrase", {
+  const res = await fetch("https://parafrase-tools.vercel.app/api/paraphrase", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
