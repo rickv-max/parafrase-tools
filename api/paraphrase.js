@@ -91,6 +91,14 @@ export default async function handler(req, res) {
       result,
       cached: false,
     });
+    catch (error) {
+  console.error("FULL SERVER ERROR:", error);
+
+  res.status(500).json({
+    success: false,
+    error: error.message,
+  });
+}
 
   } catch (error) {
     console.error("SERVER ERROR:", error);
