@@ -10,15 +10,15 @@ const PARAPHRASE_PROMPTS = {
 };
 
 export default async function handler(req, res) {
-  if (req.method !== "POST") {
-    return res.status(405).json({
-      success: false,
-      error: "Method not allowed",
-    });
-  }
-
   try {
-    const { text, mode } = req.body;
+    if (req.method !== "POST") {
+      return res.status(405).json({
+        success: false,
+        error: "Method not allowed",
+      });
+    }
+
+    const { text, mode } = req.body || {};
 
     if (!text) {
       return res.status(400).json({
@@ -74,9 +74,8 @@ export default async function handler(req, res) {
 
     const data = await response.json();
 
-    if (!data.choices || !data.choices.length) {
+    if (!data.choices) {
       console.error("Groq error:", data);
-
       return res.status(500).json({
         success: false,
         error: "Groq API error",
@@ -92,12 +91,13 @@ export default async function handler(req, res) {
       result,
       cached: false,
     });
+
   } catch (error) {
-    console.error("Server error:", error);
+    console.error("SERVER ERROR:", error);
 
     return res.status(500).json({
       success: false,
-      error: "Server error",
+      error: "Internal server error",
     });
   }
 }
