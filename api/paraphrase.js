@@ -11,20 +11,27 @@ const PARAPHRASE_PROMPTS = {
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
-    return res.status(405).json({ error: "Method not allowed" });
+    return res.status(405).json({
+      success: false,
+      error: "Method not allowed",
+    });
   }
 
   try {
     const { text, mode } = req.body;
 
     if (!text) {
-      return res.status(400).json({ error: "Text kosong" });
+      return res.status(400).json({
+        success: false,
+        error: "Text kosong",
+      });
     }
 
-    const wordCount = text.split(/\s+/).length;
+    const wordCount = text.trim().split(/\s+/).length;
 
     if (wordCount > 1000) {
       return res.status(403).json({
+        success: false,
         error: "Max 1000 kata untuk free user",
       });
     }
@@ -53,7 +60,7 @@ export default async function handler(req, res) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          model: "openai/gpt-oss-120b",
+          model: "llama-3.3-70b-versatile",
           messages: [
             {
               role: "user",
@@ -67,19 +74,30 @@ export default async function handler(req, res) {
 
     const data = await response.json();
 
+    if (!data.choices || !data.choices.length) {
+      console.error("Groq error:", data);
+
+      return res.status(500).json({
+        success: false,
+        error: "Groq API error",
+      });
+    }
+
     const result = data.choices[0].message.content;
 
     cache.set(cacheKey, result);
 
-    res.json({
+    return res.json({
       success: true,
       result,
       cached: false,
     });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({
-      error: "Processing error",
+    console.error("Server error:", error);
+
+    return res.status(500).json({
+      success: false,
+      error: "Server error",
     });
   }
 }
