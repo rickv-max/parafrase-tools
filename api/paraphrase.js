@@ -1,7 +1,3 @@
-import NodeCache from "node-cache";
-
-const cache = new NodeCache({ stdTTL: 3600 });
-
 const PARAPHRASE_PROMPTS = {
   standard: "Parafrase teks berikut dengan gaya netral:\n",
   academic: "Parafrase teks berikut dengan gaya akademik formal:\n",
@@ -10,15 +6,12 @@ const PARAPHRASE_PROMPTS = {
 };
 
 export default async function handler(req, res) {
-  try {
-    if (req.method !== "POST") {
-      return res.status(405).json({
-        success: false,
-        error: "Method not allowed",
-      });
-    }
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Method not allowed" });
+  }
 
-    const { text, mode } = req.body || {};
+  try {
+    const { text, mode } = req.body;
 
     if (!text) {
       return res.status(400).json({
@@ -27,29 +20,10 @@ export default async function handler(req, res) {
       });
     }
 
-    const wordCount = text.trim().split(/\s+/).length;
-
-    if (wordCount > 1000) {
-      return res.status(403).json({
-        success: false,
-        error: "Max 1000 kata untuk free user",
-      });
-    }
-
-    const cacheKey = `${mode}_${text}`;
-    const cached = cache.get(cacheKey);
-
-    if (cached) {
-      return res.json({
-        success: true,
-        result: cached,
-        cached: true,
-      });
-    }
-
     const prompt =
       (PARAPHRASE_PROMPTS[mode] || PARAPHRASE_PROMPTS.standard) +
-      `\n\n${text}`;
+      "\n\n" +
+      text;
 
     const response = await fetch(
       "https://api.groq.com/openai/v1/chat/completions",
@@ -60,7 +34,7 @@ export default async function handler(req, res) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          model: "llama-3.3-70b-versatile",
+          model: "openai/gpt-oss-120b",
           messages: [
             {
               role: "user",
@@ -75,37 +49,22 @@ export default async function handler(req, res) {
     const data = await response.json();
 
     if (!data.choices) {
-      console.error("Groq error:", data);
-      return res.status(500).json({
-        success: false,
-        error: "Groq API error",
-      });
+      console.error("GROQ ERROR:", data);
+      throw new Error("Groq API error");
     }
 
     const result = data.choices[0].message.content;
 
-    cache.set(cacheKey, result);
-
     return res.json({
       success: true,
       result,
-      cached: false,
     });
-    catch (error) {
-  console.error("FULL SERVER ERROR:", error);
-
-  res.status(500).json({
-    success: false,
-    error: error.message,
-  });
-}
-
   } catch (error) {
     console.error("SERVER ERROR:", error);
 
     return res.status(500).json({
       success: false,
-      error: "Internal server error",
+      error: error.message,
     });
   }
 }
