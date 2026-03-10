@@ -33,21 +33,30 @@ const Pricing = () => {
   return (
     <div className="min-h-screen bg-white dark:bg-slate-900">
       {/* Header */}
-      <section className="relative py-20 px-4 bg-gradient-to-br from-primary-50 to-secondary-50 dark:from-slate-900 dark:to-slate-800 border-b border-slate-200 dark:border-slate-700">
-        <div className="max-w-6xl mx-auto text-center">
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-          >
-            <h1 className="text-5xl font-bold text-slate-900 dark:text-white mb-4">
-              Paket Berlangganan
-            </h1>
-            <p className="text-xl text-slate-600 dark:text-slate-300 mb-8">
-              Pilih paket yang sesuai dengan kebutuhan Anda
-            </p>
-          </motion.div>
-        </div>
-      </section>
+      {/* Header */}
+<section className="relative py-24 px-4 overflow-hidden">
+  <div className="absolute inset-0 bg-gradient-to-br from-primary-50 via-white to-secondary-50 dark:from-slate-900 dark:via-slate-900 dark:to-slate-800 -z-10" />
+
+  <div className="max-w-5xl mx-auto text-center">
+    <motion.div
+      initial={{ opacity: 0, y: -20 }}
+      animate={{ opacity: 1, y: 0 }}
+    >
+      <span className="inline-block mb-4 px-4 py-1 text-sm font-semibold rounded-full bg-primary-100 text-primary-600 dark:bg-primary-900/30 dark:text-primary-400">
+        🔥 Promo Terbatas
+      </span>
+
+      <h1 className="text-4xl sm:text-5xl font-bold text-slate-900 dark:text-white mb-4">
+        Pilih Paket Terbaik
+      </h1>
+
+      <p className="text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto">
+        Gunakan fitur parafrase lengkap dengan berbagai mode penulisan.
+        Mulai gratis atau upgrade untuk membuka semua fitur.
+      </p>
+    </motion.div>
+  </div>
+</section>
 
       {/* Pricing Cards */}
       <section className="py-20 px-4">
