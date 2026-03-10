@@ -65,7 +65,7 @@ export const getPricingPlans = () => {
     {
       id: "pro",
       name: "Pro",
-      price: 49999,
+      price: 29999,
       period: "per bulan",
       features: [
         "500 kata per proses",
@@ -84,7 +84,7 @@ export const getPricingPlans = () => {
     {
       id: "premium",
       name: "Premium",
-      price: 99000,
+      price: 56000,
       period: "per bulan",
       features: [
         "Unlimited kata",
