@@ -59,67 +59,105 @@ const Pricing = () => {
 </section>
 
       {/* Pricing Cards */}
-      <section className="py-20 px-4">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {plans.map((plan, index) => (
-              <motion.div
-                key={plan.id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-                className={`relative rounded-2xl border-2 transition-all ${
-                  index === 2
-                    ? "border-primary-500 lg:scale-105 lg:-my-4 shadow-lg"
-                    : "border-slate-200 dark:border-slate-700"
-                } p-8 bg-white dark:bg-slate-800`}
-              >
-                {index === 2 && (
-                  <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-gradient-to-r from-primary-500 to-secondary-600 text-white text-sm font-bold">
-                    Rekomendasi
-                  </div>
-                )}
+<section className="py-20 px-4">
+  <div className="max-w-6xl mx-auto">
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
 
-                <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">
-                  {plan.name}
-                </h3>
+      {plans.map((plan) => (
+        <motion.div
+          key={plan.id}
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          className={`relative rounded-2xl border-2 p-8 bg-white dark:bg-slate-800 transition-all
+          ${
+            plan.id === "premium"
+              ? "border-primary-500 shadow-xl scale-105"
+              : "border-slate-200 dark:border-slate-700"
+          }`}
+        >
 
-                <div className="mb-6">
-                  <span className="text-4xl font-bold text-slate-900 dark:text-white">
-                    Rp {plan.price.toLocaleString("id-ID")}
-                  </span>
-                  <span className="text-slate-600 dark:text-slate-400 ml-2">
-                    / {plan.period}
-                  </span>
-                </div>
+          {/* Badge */}
+          {plan.id === "premium" && (
+            <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-gradient-to-r from-primary-500 to-secondary-600 text-white text-sm font-bold">
+              Rekomendasi
+            </div>
+          )}
 
-                <button
-                  onClick={() => handleUpgrade(plan.id)}
-                  className={`w-full py-3 px-6 rounded-lg font-bold mb-8 transition-all flex items-center justify-center gap-2 ${
-                    index === 2
-                      ? "bg-gradient-to-r from-primary-500 to-secondary-600 text-white hover:shadow-lg"
-                      : "border-2 border-primary-500 text-primary-600 dark:text-primary-400 hover:bg-primary-50 dark:hover:bg-primary-900/20"
-                  }`}
-                >
-                  {plan.id === "free" ? "Mulai Gratis" : "Upgrade Sekarang"}
-                  <FiArrowRight />
-                </button>
+          {plan.id === "pro" && (
+            <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-blue-500 text-white text-sm font-bold">
+              Paling Populer
+            </div>
+          )}
 
-                <div className="space-y-4">
-                  {plan.features.map((feature, featureIndex) => (
-                    <div key={featureIndex} className="flex items-start gap-3">
-                      <FiCheck className="text-primary-500 flex-shrink-0 mt-1" />
-                      <span className="text-slate-700 dark:text-slate-300">
-                        {feature}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </motion.div>
+          {/* Plan Name */}
+          <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-4">
+            {plan.name}
+          </h3>
+
+          {/* Price */}
+          <div className="mb-6">
+
+            {/* Harga lama dicoret */}
+            {plan.id === "pro" && (
+              <p className="text-sm text-slate-400 line-through">
+                Rp 49.999
+              </p>
+            )}
+
+            {plan.id === "premium" && (
+              <p className="text-sm text-slate-400 line-through">
+                Rp 99.000
+              </p>
+            )}
+
+            {/* Harga sekarang */}
+            <span className="text-4xl font-bold text-slate-900 dark:text-white">
+              Rp {plan.price.toLocaleString("id-ID")}
+            </span>
+
+            <span className="text-slate-600 dark:text-slate-400 ml-2">
+              / {plan.period}
+            </span>
+
+            {(plan.id === "pro" || plan.id === "premium") && (
+              <p className="text-green-600 text-sm font-semibold mt-1">
+                🔥 Promo terbatas
+              </p>
+            )}
+          </div>
+
+          {/* Button */}
+          <button
+            onClick={() => handleUpgrade(plan.id)}
+            className={`w-full py-3 px-6 rounded-lg font-bold mb-8 flex items-center justify-center gap-2 transition
+            ${
+              plan.id === "premium"
+                ? "bg-gradient-to-r from-primary-500 to-secondary-600 text-white hover:shadow-lg"
+                : "border-2 border-primary-500 text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20"
+            }`}
+          >
+            {plan.id === "free" ? "Mulai Gratis" : "Upgrade Sekarang"}
+            <FiArrowRight />
+          </button>
+
+          {/* Features */}
+          <div className="space-y-4">
+            {plan.features.map((feature, index) => (
+              <div key={index} className="flex items-start gap-3">
+                <FiCheck className="text-primary-500 mt-1" />
+                <span className="text-slate-700 dark:text-slate-300">
+                  {feature}
+                </span>
+              </div>
             ))}
           </div>
-        </div>
-      </section>
+
+        </motion.div>
+      ))}
+
+    </div>
+  </div>
+</section>
 
       {/* FAQ Section */}
       <section className="py-20 px-4 bg-slate-50 dark:bg-slate-800">
