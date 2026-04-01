@@ -142,7 +142,7 @@ const History = () => {
                     <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2">
                       Teks Asli
                     </p>
-                    <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed line-clamp-5">
+                    <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
                       {item.input}
                     </p>
                   </div>
@@ -152,7 +152,7 @@ const History = () => {
                     <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2">
                       Hasil Parafrase
                     </p>
-                    <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed line-clamp-5">
+                    <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
                       {item.output}
                     </p>
                   </div>
